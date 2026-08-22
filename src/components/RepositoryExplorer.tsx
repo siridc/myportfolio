@@ -15,24 +15,17 @@ const tree: TreeNode = {
   label: 'dessiree-portfolio',
   children: [
     { label: 'README.md', target: 'about' },
-    { label: 'skills.json', target: 'skills' },
-    { label: 'resume.pdf', target: 'contact' },
-    {
-      label: 'projects',
-      children: [
-        { label: 'featured-projects', target: 'projects' },
-        { label: 'github-repos', target: 'github' },
-      ],
-    },
-    { label: 'experience', target: 'experience' },
     { label: 'education', target: 'education' },
+    { label: 'skills.json', target: 'skills' },
+    { label: 'projects', target: 'projects' },
+    { label: 'experience', target: 'experience' },
+    { label: 'resume.pdf', target: 'contact' },
   ],
 }
 
 export function RepositoryExplorer({ onNavigate }: RepositoryExplorerProps) {
   const [openFolders, setOpenFolders] = useState<Record<string, boolean>>({
     'dessiree-portfolio': true,
-    projects: true,
   })
 
   const renderNode = (node: TreeNode, depth = 0): React.ReactNode => {

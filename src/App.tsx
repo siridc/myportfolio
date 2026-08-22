@@ -10,7 +10,6 @@ import {
   CredentialsSection,
   EducationSection,
   ExperienceSection,
-  GitHubSection,
   ProjectsSection,
   SkillsSection,
 } from './components/Sections'
@@ -47,14 +46,6 @@ function App() {
     window.open(profile.resumeUrl, '_blank', 'noopener,noreferrer')
   }, [])
 
-  const openGithub = useCallback(() => {
-    window.open(profile.githubUrl, '_blank', 'noopener,noreferrer')
-  }, [])
-
-  const openLinkedin = useCallback(() => {
-    window.open(profile.linkedinUrl, '_blank', 'noopener,noreferrer')
-  }, [])
-
   useEffect(() => {
     const handleShortcut = (event: KeyboardEvent) => {
       if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
@@ -77,9 +68,6 @@ function App() {
     <div className="min-h-screen bg-[var(--bg)] text-[var(--text)]">
       <Navbar
         onNavigate={scrollToSection}
-        onOpenResume={openResume}
-        onOpenGithub={openGithub}
-        onOpenLinkedin={openLinkedin}
         isDark={isDark}
         onToggleTheme={toggleTheme}
         mobileOpen={mobileOpen}
@@ -102,9 +90,6 @@ function App() {
         <div ref={registerSection('projects')}>
           <ProjectsSection />
         </div>
-        <div ref={registerSection('github')}>
-          <GitHubSection />
-        </div>
         <div ref={registerSection('experience')}>
           <ExperienceSection />
         </div>
@@ -112,7 +97,7 @@ function App() {
           <CredentialsSection />
         </div>
         <div ref={registerSection('contact')}>
-          <ContactSection onOpenResume={openResume} />
+          <ContactSection />
         </div>
       </main>
 
@@ -133,8 +118,6 @@ function App() {
         onClose={() => setTerminalOpen(false)}
         onNavigate={scrollToSection}
         onOpenResume={openResume}
-        onOpenGithub={openGithub}
-        onOpenLinkedin={openLinkedin}
       />
 
       <CommandPalette
@@ -142,8 +125,6 @@ function App() {
         onClose={() => setPaletteOpen(false)}
         onNavigate={scrollToSection}
         onOpenResume={openResume}
-        onOpenGithub={openGithub}
-        onOpenLinkedin={openLinkedin}
         onToggleTheme={toggleTheme}
       />
     </div>

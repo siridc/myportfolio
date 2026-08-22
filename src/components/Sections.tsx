@@ -114,7 +114,7 @@ export function SkillsSection() {
             <h3 className="text-base font-semibold text-[var(--text-strong)]">{group.title}</h3>
             <div className="mt-4 flex flex-wrap gap-2">
               {group.items.map((item) => (
-                <Tag key={item} tone={group.title === 'Frameworks / Libraries' ? 'green' : group.title === 'Other' ? 'purple' : 'default'}>
+                <Tag key={item} tone={group.title === 'Frameworks / Libraries' ? 'green' : group.title === 'Soft Skills' ? 'purple' : 'default'}>
                   {item}
                 </Tag>
               ))}
@@ -130,6 +130,37 @@ export function ProjectsSection() {
   const [activeProjectIndex, setActiveProjectIndex] = useState<number | null>(null)
   const triggerRef = useRef<HTMLButtonElement | null>(null)
   const activeProject = activeProjectIndex === null ? null : projects[activeProjectIndex]
+
+  const [repositories, setRepositories] = useState<GithubRepository[]>([])
+  const [reposLoading, setReposLoading] = useState(false)
+  const [reposError, setReposError] = useState<string | null>(null)
+
+  useEffect(() => {
+    let mounted = true
+
+    async function loadRepositories() {
+      if (!profile.githubUsername) {
+        return
+      }
+
+      setReposLoading(true)
+      const result = await fetchGithubRepositories(profile.githubUsername)
+
+      if (!mounted) {
+        return
+      }
+
+      setRepositories(result.repositories)
+      setReposError(result.error)
+      setReposLoading(false)
+    }
+
+    void loadRepositories()
+
+    return () => {
+      mounted = false
+    }
+  }, [])
 
   const closeShowcase = () => {
     setActiveProjectIndex(null)
@@ -207,6 +238,54 @@ export function ProjectsSection() {
           </article>
           ))}
         </div>
+
+        {/* GitHub Repositories */}
+        <div className="mt-10 rounded-xl border border-[var(--border)] bg-[var(--surface)] p-5 shadow-[var(--shadow)]">
+          <div className="flex items-center justify-between gap-3 border-b border-[var(--border)] pb-3">
+            <div>
+              <p className="font-mono text-xs uppercase tracking-[0.24em] text-[var(--text)]">$ git activity</p>
+              <h3 className="mt-1 text-lg font-semibold text-[var(--text-strong)]">GitHub Repositories</h3>
+            </div>
+            <GitHubMark className="h-5 w-5 text-[var(--accent-blue)]" />
+          </div>
+
+          {reposLoading ? <p className="mt-4 text-sm text-[var(--text)]">Loading GitHub repositories...</p> : null}
+          {reposError ? <p className="mt-4 text-sm text-[var(--accent-error)]">{reposError}</p> : null}
+
+          {!reposLoading && !reposError && repositories.length === 0 ? (
+            <div className="mt-4 rounded-lg border border-dashed border-[var(--border)] bg-[var(--surface-muted)] p-5 text-sm leading-7 text-[var(--text)]">
+              Add a GitHub username to VITE_GITHUB_USERNAME to show live repository data.
+            </div>
+          ) : null}
+
+          <div className="mt-5 grid gap-4 lg:grid-cols-2">
+            {repositories.map((repository) => (
+              <article key={repository.html_url} className="rounded-lg border border-[var(--border)] bg-[var(--surface-muted)] p-4">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <h4 className="text-base font-semibold text-[var(--text-strong)]">{repository.name}</h4>
+                    <p className="mt-1 text-sm leading-6 text-[var(--text)]">{repository.description ?? 'No description available.'}</p>
+                  </div>
+                  <Tag tone="blue">{repository.language ?? 'Repo'}</Tag>
+                </div>
+                <div className="mt-4 flex flex-wrap gap-3 text-xs font-mono text-[var(--text)]">
+                  <span>stars: {repository.stargazers_count}</span>
+                  <span>forks: {repository.forks_count}</span>
+                  <span>updated: {new Date(repository.updated_at).toLocaleDateString()}</span>
+                </div>
+                <a
+                  href={repository.html_url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-[var(--accent-blue)]"
+                >
+                  Open repository
+                  <ExternalLink className="h-4 w-4" />
+                </a>
+              </article>
+            ))}
+          </div>
+        </div>
       </SectionShell>
 
       <AnimatePresence>
@@ -219,95 +298,6 @@ export function ProjectsSection() {
         ) : null}
       </AnimatePresence>
     </>
-  )
-}
-
-export function GitHubSection() {
-  const [repositories, setRepositories] = useState<GithubRepository[]>([])
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-
-  useEffect(() => {
-    let mounted = true
-
-    async function loadRepositories() {
-      if (!profile.githubUsername) {
-        return
-      }
-
-      setLoading(true)
-      const result = await fetchGithubRepositories(profile.githubUsername)
-
-      if (!mounted) {
-        return
-      }
-
-      setRepositories(result.repositories)
-      setError(result.error)
-      setLoading(false)
-    }
-
-    void loadRepositories()
-
-    return () => {
-      mounted = false
-    }
-  }, [])
-
-  return (
-    <SectionShell
-      id="github"
-      eyebrow="git activity"
-      title="GitHub"
-      description=" "
-    >
-      <div className="rounded-xl border border-[var(--border)] bg-[var(--surface)] p-5 shadow-[var(--shadow)]">
-        <div className="flex items-center justify-between gap-3 border-b border-[var(--border)] pb-3">
-          <div>
-            <p className="font-mono text-xs uppercase tracking-[0.24em] text-[var(--text)]">$ git activity</p>
-            <p className="mt-1 text-sm text-[var(--text)]">Public repos, descriptions, languages, stars, forks, and activity are loaded here.</p>
-          </div>
-          <GitHubMark className="h-5 w-5 text-[var(--accent-blue)]" />
-        </div>
-
-        {loading ? <p className="mt-4 text-sm text-[var(--text)]">Loading GitHub repositories...</p> : null}
-        {error ? <p className="mt-4 text-sm text-[var(--accent-error)]">{error}</p> : null}
-
-        {!loading && !error && repositories.length === 0 ? (
-          <div className="mt-4 rounded-lg border border-dashed border-[var(--border)] bg-[var(--surface-muted)] p-5 text-sm leading-7 text-[var(--text)]">
-            Add a GitHub username to VITE_GITHUB_USERNAME to show live repository data.
-          </div>
-        ) : null}
-
-        <div className="mt-5 grid gap-4 lg:grid-cols-2">
-          {repositories.map((repository) => (
-            <article key={repository.html_url} className="rounded-lg border border-[var(--border)] bg-[var(--surface-muted)] p-4">
-              <div className="flex items-start justify-between gap-3">
-                <div>
-                  <h3 className="text-base font-semibold text-[var(--text-strong)]">{repository.name}</h3>
-                  <p className="mt-1 text-sm leading-6 text-[var(--text)]">{repository.description ?? 'No description available.'}</p>
-                </div>
-                <Tag tone="blue">{repository.language ?? 'Repo'}</Tag>
-              </div>
-              <div className="mt-4 flex flex-wrap gap-3 text-xs font-mono text-[var(--text)]">
-                <span>stars: {repository.stargazers_count}</span>
-                <span>forks: {repository.forks_count}</span>
-                <span>updated: {new Date(repository.updated_at).toLocaleDateString()}</span>
-              </div>
-              <a
-                href={repository.html_url}
-                target="_blank"
-                rel="noreferrer"
-                className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-[var(--accent-blue)]"
-              >
-                Open repository
-                <ExternalLink className="h-4 w-4" />
-              </a>
-            </article>
-          ))}
-        </div>
-      </div>
-    </SectionShell>
   )
 }
 

@@ -7,13 +7,11 @@ type TerminalProps = {
   onClose: () => void
   onNavigate: (target: string) => void
   onOpenResume: () => void
-  onOpenGithub: () => void
-  onOpenLinkedin: () => void
 }
 
-const commands = ['about', 'skills', 'projects', 'github', 'experience', 'credentials', 'education', 'contact', 'resume', 'linkedin', 'clear', 'help']
+const commands = ['about', 'education', 'skills', 'projects', 'experience', 'credentials', 'contact', 'resume', 'clear', 'help']
 
-export function Terminal({ isOpen, onClose, onNavigate, onOpenResume, onOpenGithub, onOpenLinkedin }: TerminalProps) {
+export function Terminal({ isOpen, onClose, onNavigate, onOpenResume }: TerminalProps) {
   const shouldReduceMotion = useReducedMotion()
   const [history, setHistory] = useState<string[]>(['Type "help" to see available commands.'])
   const [input, setInput] = useState('')
@@ -33,15 +31,15 @@ export function Terminal({ isOpen, onClose, onNavigate, onOpenResume, onOpenGith
       case 'help':
         setHistory((current) => [
           ...current,
-          'Available: about, skills, projects, github, experience, credentials, education, contact, resume, linkedin, clear',
+          'Available: about, education, skills, projects, experience, credentials, contact, resume, clear',
         ])
         break
       case 'about':
+      case 'education':
       case 'skills':
       case 'projects':
       case 'experience':
       case 'credentials':
-      case 'education':
       case 'contact':
         onNavigate(command)
         setHistory((current) => [...current, `Navigating to ${command}.`])
@@ -49,15 +47,6 @@ export function Terminal({ isOpen, onClose, onNavigate, onOpenResume, onOpenGith
       case 'resume':
         onOpenResume()
         setHistory((current) => [...current, 'Opening resume in a new tab.'])
-        break
-      case 'linkedin':
-        onOpenLinkedin()
-        setHistory((current) => [...current, 'Opening LinkedIn in a new tab.'])
-        break
-      case 'github':
-        onOpenGithub()
-        onNavigate('github')
-        setHistory((current) => [...current, 'Opening GitHub profile and navigating to github section.'])
         break
       case 'clear':
         setHistory([])

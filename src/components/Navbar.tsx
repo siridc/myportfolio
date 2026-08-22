@@ -1,13 +1,10 @@
 import { Menu, NotebookTabs, X } from 'lucide-react'
 import { sections } from '../data/navigation'
+import { profile } from '../data/profile'
 import { ThemeToggle } from './ThemeToggle'
-import { GitHubMark, LinkedInMark } from './Icons'
 
 type NavbarProps = {
   onNavigate: (target: string) => void
-  onOpenResume: () => void
-  onOpenGithub: () => void
-  onOpenLinkedin: () => void
   isDark: boolean
   onToggleTheme: () => void
   mobileOpen: boolean
@@ -16,9 +13,6 @@ type NavbarProps = {
 
 export function Navbar({
   onNavigate,
-  onOpenResume,
-  onOpenGithub,
-  onOpenLinkedin,
   isDark,
   onToggleTheme,
   mobileOpen,
@@ -56,30 +50,15 @@ export function Navbar({
         </nav>
 
         <div className="hidden items-center gap-2 sm:flex">
-          <button
-            type="button"
-            onClick={onOpenGithub}
-            className="inline-flex h-10 items-center gap-2 rounded-md border border-[var(--border)] bg-[var(--surface)] px-3 text-sm font-medium text-[var(--text)] transition hover:border-[var(--accent-blue)] hover:text-[var(--accent-blue)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-blue)]"
-          >
-            <GitHubMark className="h-4 w-4" />
-            GitHub
-          </button>
-          <button
-            type="button"
-            onClick={onOpenLinkedin}
-            className="inline-flex h-10 items-center gap-2 rounded-md border border-[var(--border)] bg-[var(--surface)] px-3 text-sm font-medium text-[var(--text)] transition hover:border-[var(--accent-blue)] hover:text-[var(--accent-blue)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-blue)]"
-          >
-            <LinkedInMark className="h-4 w-4" />
-            LinkedIn
-          </button>
-          <button
-            type="button"
-            onClick={onOpenResume}
+          <a
+            href={profile.resumeUrl}
+            download={profile.resumeDownloadName}
             className="inline-flex h-10 items-center gap-2 rounded-md bg-[var(--accent-green)] px-3 text-sm font-semibold text-white transition hover:bg-[var(--accent-green-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-blue)]"
+            style={{ color: 'white' }}
           >
             <NotebookTabs className="h-4 w-4" />
             Resume
-          </button>
+          </a>
           <ThemeToggle isDark={isDark} onToggle={onToggleTheme} />
         </div>
 
@@ -107,30 +86,15 @@ export function Navbar({
               </button>
             ))}
             <div className="grid grid-cols-2 gap-2 pt-2">
-              <button
-                type="button"
-                onClick={onOpenGithub}
-                className="inline-flex items-center justify-center gap-2 rounded-md border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-sm font-medium text-[var(--text-strong)]"
-              >
-                <GitHubMark className="h-4 w-4" />
-                GitHub
-              </button>
-              <button
-                type="button"
-                onClick={onOpenLinkedin}
-                className="inline-flex items-center justify-center gap-2 rounded-md border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-sm font-medium text-[var(--text-strong)]"
-              >
-                <LinkedInMark className="h-4 w-4" />
-                LinkedIn
-              </button>
-              <button
-                type="button"
-                onClick={onOpenResume}
-                className="col-span-2 inline-flex items-center justify-center gap-2 rounded-md bg-[var(--accent-green)] px-4 py-3 text-sm font-semibold text-white"
+              <a
+                href={profile.resumeUrl}
+                download={profile.resumeDownloadName}
+                className="col-span-1 inline-flex items-center justify-center gap-2 rounded-md bg-[var(--accent-green)] px-4 py-3 text-sm font-semibold text-white"
+                style={{ color: 'white' }}
               >
                 <NotebookTabs className="h-4 w-4" />
                 Resume
-              </button>
+              </a>
               <ThemeToggle isDark={isDark} onToggle={onToggleTheme} />
             </div>
           </nav>

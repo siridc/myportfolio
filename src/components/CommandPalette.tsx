@@ -8,8 +8,6 @@ type CommandPaletteProps = {
   onClose: () => void
   onNavigate: (target: string) => void
   onOpenResume: () => void
-  onOpenGithub: () => void
-  onOpenLinkedin: () => void
   onToggleTheme: () => void
 }
 
@@ -18,8 +16,6 @@ export function CommandPalette({
   onClose,
   onNavigate,
   onOpenResume,
-  onOpenGithub,
-  onOpenLinkedin,
   onToggleTheme,
 }: CommandPaletteProps) {
   const shouldReduceMotion = useReducedMotion()
@@ -30,11 +26,9 @@ export function CommandPalette({
       [
         ...commandItems,
         { label: 'Open Resume', action: onOpenResume },
-        { label: 'Open GitHub', action: onOpenGithub },
-        { label: 'Open LinkedIn', action: onOpenLinkedin },
         { label: 'Toggle Dark Mode', action: onToggleTheme },
       ].filter((item) => item.label.toLowerCase().includes(query.toLowerCase())),
-    [onOpenGithub, onOpenLinkedin, onOpenResume, onToggleTheme, query],
+    [onOpenResume, onToggleTheme, query],
   )
 
   return (
