@@ -35,7 +35,7 @@ export async function fetchGithubRepositories(username: string) {
 
     const repositories = (await response.json()) as GithubRepository[]
 
-    const excludedRepositories = ['truehue-website', 'siridc', 'ob-gyn-clinic_copy']
+    const excludedRepositories = ['truehue-website', 'siridc', 'ob-gyn-clinic_copy', 'Qualifiying-Project--website-']
 
     const filteredRepositories = repositories
       .filter(
