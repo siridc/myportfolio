@@ -403,7 +403,7 @@ export function CredentialsSection() {
   )
 }
 
-export function ContactSection({ onOpenResume: _onOpenResume }: { onOpenResume?: () => void }) {
+export function ContactSection() {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [message, setMessage] = useState('')
   const [name, setName] = useState('')
