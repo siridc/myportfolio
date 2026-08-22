@@ -42,7 +42,7 @@ export async function fetchGithubRepositories(username: string) {
         (repo) =>
           !excludedRepositories.includes(repo.name.toLowerCase()),
       )
-      .slice(0, 6)
+      .slice(0, 4)
 
     return {
       repositories: filteredRepositories,
