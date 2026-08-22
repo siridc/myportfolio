@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { CommandPalette } from './components/CommandPalette'
 import { Footer } from './components/Footer'
 import { Hero } from './components/Hero'
@@ -17,25 +17,35 @@ import { Terminal } from './components/Terminal'
 import { profile } from './data/profile'
 import { useTheme } from './hooks/useTheme'
 
+function scrollToHash(hash: string) {
+  const id = hash.replace(/^#/, '')
+
+  if (!id || id === 'home') {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+    return
+  }
+
+  const element = document.getElementById(id)
+  element?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+}
+
 function App() {
   const { isDark, toggleTheme } = useTheme()
   const [mobileOpen, setMobileOpen] = useState(false)
   const [terminalOpen, setTerminalOpen] = useState(false)
   const [paletteOpen, setPaletteOpen] = useState(false)
-  const sectionRefs = useRef<Record<string, HTMLElement | null>>({})
-
-  const registerSection = useCallback((id: string) => (element: HTMLElement | null) => {
-    sectionRefs.current[id] = element
-  }, [])
 
   const scrollToSection = useCallback(
     (target: string) => {
       if (target === 'home') {
         window.scrollTo({ top: 0, behavior: 'smooth' })
-        return
+        history.replaceState(null, '', window.location.pathname)
+      } else {
+        const element = document.getElementById(target)
+        element?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        history.pushState(null, '', `#${target}`)
       }
 
-      sectionRefs.current[target]?.scrollIntoView({ behavior: 'smooth', block: 'start' })
       setMobileOpen(false)
       setPaletteOpen(false)
     },
@@ -64,6 +74,26 @@ function App() {
     return () => window.removeEventListener('keydown', handleShortcut)
   }, [])
 
+  // Handle browser back/forward navigation
+  useEffect(() => {
+    const handleHashChange = () => {
+      scrollToHash(window.location.hash)
+    }
+
+    window.addEventListener('hashchange', handleHashChange)
+    return () => window.removeEventListener('hashchange', handleHashChange)
+  }, [])
+
+  // Scroll to hash on initial page load
+  useEffect(() => {
+    if (window.location.hash) {
+      // Small delay to ensure DOM is fully rendered
+      requestAnimationFrame(() => {
+        scrollToHash(window.location.hash)
+      })
+    }
+  }, [])
+
   return (
     <div className="min-h-screen bg-[var(--bg)] text-[var(--text)]">
       <Navbar
@@ -77,28 +107,13 @@ function App() {
       <main>
         <Hero onNavigate={scrollToSection} />
         <RepositoryExplorer onNavigate={scrollToSection} />
-
-        <div ref={registerSection('about')}>
-          <AboutSection />
-        </div>
-        <div ref={registerSection('education')}>
-          <EducationSection />
-        </div>
-        <div ref={registerSection('skills')}>
-          <SkillsSection />
-        </div>
-        <div ref={registerSection('projects')}>
-          <ProjectsSection />
-        </div>
-        <div ref={registerSection('experience')}>
-          <ExperienceSection />
-        </div>
-        <div ref={registerSection('credentials')}>
-          <CredentialsSection />
-        </div>
-        <div ref={registerSection('contact')}>
-          <ContactSection />
-        </div>
+        <AboutSection />
+        <EducationSection />
+        <SkillsSection />
+        <ProjectsSection />
+        <ExperienceSection />
+        <CredentialsSection />
+        <ContactSection />
       </main>
 
       <Footer />
@@ -132,3 +147,4 @@ function App() {
 }
 
 export default App
+

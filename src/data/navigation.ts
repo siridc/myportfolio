@@ -1,10 +1,11 @@
 export const sections = [
   { id: 'about', label: 'README' },
   { id: 'education', label: 'Education' },
-  { id: 'skills', label: 'Skills' },
+  { id: 'skills', label: 'Skills & Tools' },
   { id: 'projects', label: 'Projects' },
   { id: 'experience', label: 'Experience' },
   { id: 'credentials', label: 'Credentials' },
+  { label: "Contact", id: "contact" },
 ] as const
 
 export const commandItems = [
@@ -15,4 +16,4 @@ export const commandItems = [
   { label: 'Go to Experience', target: 'experience' },
   { label: 'Go to Credentials', target: 'credentials' },
   { label: 'Contact Dessiree', target: 'contact' },
-] as const
+] as const

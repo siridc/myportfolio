@@ -19,6 +19,7 @@ const tree: TreeNode = {
     { label: 'skills.json', target: 'skills' },
     { label: 'projects', target: 'projects' },
     { label: 'experience', target: 'experience' },
+    { label: 'credentials', target: 'credentials' },
     { label: 'contact', target: 'contact' },
   ],
 }
