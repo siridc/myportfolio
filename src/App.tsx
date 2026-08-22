@@ -26,7 +26,12 @@ function scrollToHash(hash: string) {
   }
 
   const element = document.getElementById(id)
-  element?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  if (!element) return
+
+  const header = document.querySelector('header')
+  const offset = header ? header.offsetHeight + 16 : 96
+  const top = element.getBoundingClientRect().top + window.scrollY - offset
+  window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' })
 }
 
 function App() {
@@ -37,17 +42,40 @@ function App() {
 
   const scrollToSection = useCallback(
     (target: string) => {
+      // Close menus FIRST — the mobile menu is inline in the sticky header
+      // and adds ~440px of height. We must wait for it to collapse before
+      // calculating scroll positions, otherwise the target is off by that amount.
+      setMobileOpen(false)
+      setPaletteOpen(false)
+
+      // Update URL
       if (target === 'home') {
-        window.scrollTo({ top: 0, behavior: 'smooth' })
         history.replaceState(null, '', window.location.pathname)
       } else {
-        const element = document.getElementById(target)
-        element?.scrollIntoView({ behavior: 'smooth', block: 'start' })
         history.pushState(null, '', `#${target}`)
       }
 
-      setMobileOpen(false)
-      setPaletteOpen(false)
+      // Double rAF waits for React to commit the DOM update (menu collapse)
+      // before we measure positions. Without this, getBoundingClientRect
+      // returns the position with the menu still open.
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          if (target === 'home') {
+            window.scrollTo({ top: 0, behavior: 'smooth' })
+            return
+          }
+
+          const element = document.getElementById(target)
+          if (!element) return
+
+          // Dynamically measure the (now-collapsed) navbar height + breathing room
+          const header = document.querySelector('header')
+          const offset = header ? header.offsetHeight + 16 : 96
+
+          const top = element.getBoundingClientRect().top + window.scrollY - offset
+          window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' })
+        })
+      })
     },
     [],
   )
