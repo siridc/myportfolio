@@ -1,7 +1,7 @@
 export const skillGroups = [
   {
     title: 'Programming Languages',
-    items: ['JavaScript', 'TypeScript', 'Python', 'PHP', 'Java', 'Dart', 'Visual Basic'],
+    items: ['JavaScript', 'TypeScript', 'Python', 'PHP', 'Java', 'Dart', 'SQL','Visual Basic'],
   },
   {
     title: 'Web & Markup',
@@ -17,11 +17,11 @@ export const skillGroups = [
   },
   {
     title: 'Development Tools',
-    items: ['Visual Studio Code', 'XAMPP', 'Git', 'GitHub', 'Android Studio', 'Postman', 'Figma', 'Canva', 'Cisco Packet Tracer', 'Microsoft Office Suite'],
+    items: ['Visual Studio Code', 'XAMPP', 'Git', 'GitHub', 'Android Studio', 'Postman', 'Figma', 'Canva', 'Powershell', 'Cisco Packet Tracer', 'Microsoft Office Suite'],
   },
   {
     title: 'Concepts & Practices',
-    items: ['REST APIs', 'Responsive Web Design', 'UI/UX', 'Data Visualization', 'Manual Testing', 'Project Management', 'Technical Documentation', 'Quality Assurance'],
+    items: ['Responsive Web Design', 'Mobile Development', 'Web Development', 'UI/UX', 'Data Visualization', 'Manual Testing', 'Project Management', 'Technical Documentation', 'Quality Assurance'],
   },
   {
     title: 'Soft Skills',

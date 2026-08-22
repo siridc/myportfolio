@@ -182,60 +182,60 @@ export function ProjectsSection() {
       >
         <div className="grid gap-5 lg:grid-cols-2">
           {projects.map((project, projectIndex) => (
-          <article key={project.name} className="overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow)]">
-            <div className="border-b border-[var(--border)] bg-[linear-gradient(135deg,rgba(63,185,80,0.18),rgba(88,166,255,0.12),rgba(163,113,247,0.12))] p-5">
-              <div className="flex items-center justify-between gap-3">
-                <div>
-                  <p className="font-mono text-xs uppercase tracking-[0.24em] text-[var(--text)]">branch: main</p>
-                  <h3 className="mt-2 text-xl font-semibold text-[var(--text-strong)]">{project.name}</h3>
+            <article key={project.name} className="overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow)]">
+              <div className="border-b border-[var(--border)] bg-[linear-gradient(135deg,rgba(63,185,80,0.18),rgba(88,166,255,0.12),rgba(163,113,247,0.12))] p-5">
+                <div className="flex items-center justify-between gap-3">
+                  <div>
+                    <p className="font-mono text-xs uppercase tracking-[0.24em] text-[var(--text)]">branch: main</p>
+                    <h3 className="mt-2 text-xl font-semibold text-[var(--text-strong)]">{project.name}</h3>
+                  </div>
+                  <Tag tone={project.status === 'Capstone' ? 'green' : 'blue'}>{project.status}</Tag>
                 </div>
-                <Tag tone={project.status === 'Capstone' ? 'green' : 'blue'}>{project.status}</Tag>
+                <ProjectPreview
+                  projectName={project.name}
+                  slides={project.showcase}
+                  presentation={project.presentation}
+                  onOpen={(trigger) => openShowcase(projectIndex, trigger)}
+                />
               </div>
-              <ProjectPreview
-                projectName={project.name}
-                slides={project.showcase}
-                presentation={project.presentation}
-                onOpen={(trigger) => openShowcase(projectIndex, trigger)}
-              />
-            </div>
-            <div className="space-y-4 p-5">
-              <p className="text-sm leading-7 text-[var(--text-strong)]">{project.description}</p>
-              <p className="text-sm leading-7 text-[var(--text)]">Problem solved: {project.problem}</p>
-              <div className="flex flex-wrap gap-2">
-                {project.technologies.map((technology) => (
-                  <Tag key={technology} tone="blue">
-                    {technology}
-                  </Tag>
-                ))}
+              <div className="space-y-4 p-5">
+                <p className="text-sm leading-7 text-[var(--text-strong)]">{project.description}</p>
+                <p className="text-sm leading-7 text-[var(--text)]">Problem solved: {project.problem}</p>
+                <div className="flex flex-wrap gap-2">
+                  {project.technologies.map((technology) => (
+                    <Tag key={technology} tone="blue">
+                      {technology}
+                    </Tag>
+                  ))}
+                </div>
+                <ul className="space-y-2 text-sm leading-6 text-[var(--text)]">
+                  {project.features.map((feature) => (
+                    <li key={feature} className="flex gap-2">
+                      <span className="mt-2 h-2 w-2 rounded-full bg-[var(--accent-green)]" />
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
+                <div className="flex flex-wrap gap-3">
+                  <button
+                    type="button"
+                    onClick={(event) => openShowcase(projectIndex, event.currentTarget)}
+                    className="inline-flex items-center gap-2 rounded-md border border-[var(--border)] px-4 py-2 text-sm font-medium text-[var(--text-strong)]"
+                  >
+                    <ExternalLink className="h-4 w-4" />
+                    View Project
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => window.open(project.githubUrl || profile.githubUrl, '_blank', 'noopener,noreferrer')}
+                    className="inline-flex items-center gap-2 rounded-md border border-[var(--border)] px-4 py-2 text-sm font-medium text-[var(--text-strong)]"
+                  >
+                    <GitHubMark className="h-4 w-4" />
+                    GitHub
+                  </button>
+                </div>
               </div>
-              <ul className="space-y-2 text-sm leading-6 text-[var(--text)]">
-                {project.features.map((feature) => (
-                  <li key={feature} className="flex gap-2">
-                    <span className="mt-2 h-2 w-2 rounded-full bg-[var(--accent-green)]" />
-                    {feature}
-                  </li>
-                ))}
-              </ul>
-              <div className="flex flex-wrap gap-3">
-                <button
-                  type="button"
-                  onClick={(event) => openShowcase(projectIndex, event.currentTarget)}
-                  className="inline-flex items-center gap-2 rounded-md border border-[var(--border)] px-4 py-2 text-sm font-medium text-[var(--text-strong)]"
-                >
-                  <ExternalLink className="h-4 w-4" />
-                  View Project
-                </button>
-                <button
-                  type="button"
-                  onClick={() => window.open(project.githubUrl || profile.githubUrl, '_blank', 'noopener,noreferrer')}
-                  className="inline-flex items-center gap-2 rounded-md border border-[var(--border)] px-4 py-2 text-sm font-medium text-[var(--text-strong)]"
-                >
-                  <GitHubMark className="h-4 w-4" />
-                  GitHub
-                </button>
-              </div>
-            </div>
-          </article>
+            </article>
           ))}
         </div>
 
@@ -409,12 +409,14 @@ export function ContactSection({ onOpenResume: _onOpenResume }: { onOpenResume?:
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [body, setBody] = useState('')
+  const [subject, setSubject] = useState('')
   const [emailCopied, setEmailCopied] = useState(false)
   const [phoneCopied, setPhoneCopied] = useState(false)
 
   const resetForm = () => {
     setName('')
     setEmail('')
+    setSubject('')
     setBody('')
     setStatus('idle')
     setMessage('')
@@ -436,7 +438,7 @@ export function ContactSection({ onOpenResume: _onOpenResume }: { onOpenResume?:
       const response = await fetch(profile.contactEndpoint, {
         method: 'POST',
         headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, message: body }),
+        body: JSON.stringify({ name, email, subject, message: body }),
       })
 
       if (!response.ok) {
@@ -444,7 +446,7 @@ export function ContactSection({ onOpenResume: _onOpenResume }: { onOpenResume?:
       }
 
       setStatus('success')
-      setMessage('✓ Message successfully submitted!')
+      setMessage('✓ Message sent successfully! Thanks for reaching out. I\'ll get back to you soon.')
       resetForm()
     } catch {
       setStatus('error')
@@ -480,8 +482,8 @@ export function ContactSection({ onOpenResume: _onOpenResume }: { onOpenResume?:
     <SectionShell
       id="contact"
       eyebrow="contact"
-      title="Get in touch before I write another line of code!"
-      description="Feel free to reach out if you have any questions or would like to collaborate."
+      title="Let's Connect Before I Push Another Commit"
+      description="Have a project, job opportunity, or collaboration in mind? Feel free to send me a message."
     >
       <div className="grid gap-5 lg:grid-cols-[1.15fr_0.85fr]">
         {/* Left — Contact Form */}
@@ -513,10 +515,25 @@ export function ContactSection({ onOpenResume: _onOpenResume }: { onOpenResume?:
               />
             </label>
             <label className="grid gap-2 text-sm font-medium text-[var(--text-strong)] sm:col-span-2">
+              What can I help you with?
+              <select
+                required
+                value={subject}
+                onChange={(event) => setSubject(event.target.value)}
+                className="h-11 rounded-md border border-[var(--border)] bg-[var(--surface-muted)] px-3 text-sm text-[var(--text-strong)] outline-none transition focus:border-[var(--accent-blue)] [&:invalid]:text-[var(--text)]"
+              >
+                <option value="" disabled>Select inquiry type</option>
+                <option value="Job Opportunity">Job Opportunity</option>
+                <option value="Freelance Project">Freelance Project</option>
+                <option value="Collaboration">Collaboration</option>
+                <option value="General Inquiry">General Inquiry</option>
+              </select>
+            </label>
+            <label className="grid gap-2 text-sm font-medium text-[var(--text-strong)] sm:col-span-2">
               Message
               <textarea
                 required
-                rows={6}
+                rows={2}
                 value={body}
                 onChange={(event) => setBody(event.target.value)}
                 className="rounded-md border border-[var(--border)] bg-[var(--surface-muted)] px-3 py-3 text-sm text-[var(--text-strong)] outline-none transition placeholder:text-[var(--text)] focus:border-[var(--accent-blue)]"
