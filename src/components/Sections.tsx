@@ -1,5 +1,5 @@
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
-import { ExternalLink, FileText, Mail, GraduationCap } from 'lucide-react'
+import { ExternalLink, FileText, GraduationCap, Mail, MapPin, Phone } from 'lucide-react'
 import { useEffect, useRef, useState, type FormEvent, type ReactNode } from 'react'
 import { education } from '../data/education'
 import { certifications, leadership } from '../data/credentials'
@@ -8,7 +8,7 @@ import { projects } from '../data/projects'
 import { profile } from '../data/profile'
 import { skillGroups } from '../data/skills'
 import { fetchGithubRepositories, type GithubRepository } from '../services/github'
-import { GitHubMark } from './Icons'
+import { GitHubMark, LinkedInMark } from './Icons'
 import { ProjectPreview } from './ProjectPreview'
 import { ProjectShowcase } from './ProjectShowcase'
 
@@ -409,6 +409,8 @@ export function ContactSection({ onOpenResume: _onOpenResume }: { onOpenResume?:
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [body, setBody] = useState('')
+  const [emailCopied, setEmailCopied] = useState(false)
+  const [phoneCopied, setPhoneCopied] = useState(false)
 
   const resetForm = () => {
     setName('')
@@ -450,6 +452,30 @@ export function ContactSection({ onOpenResume: _onOpenResume }: { onOpenResume?:
     }
   }
 
+  async function copyEmail() {
+    try {
+      await navigator.clipboard.writeText(profile.email)
+      setEmailCopied(true)
+      window.setTimeout(() => setEmailCopied(false), 1800)
+    } catch {
+      // clipboard unavailable
+    }
+  }
+
+  async function handlePhoneClick(event: React.MouseEvent<HTMLAnchorElement>) {
+    const isTouchDevice = window.matchMedia('(pointer: coarse)').matches
+    if (isTouchDevice) return // let the tel: link open the dialer
+
+    event.preventDefault()
+    try {
+      await navigator.clipboard.writeText(profile.phone)
+      setPhoneCopied(true)
+      window.setTimeout(() => setPhoneCopied(false), 1800)
+    } catch {
+      // clipboard unavailable
+    }
+  }
+
   return (
     <SectionShell
       id="contact"
@@ -457,67 +483,156 @@ export function ContactSection({ onOpenResume: _onOpenResume }: { onOpenResume?:
       title="Get in touch before I write another line of code!"
       description="Feel free to reach out if you have any questions or would like to collaborate."
     >
-      <form onSubmit={handleSubmit} className="rounded-xl border border-[var(--border)] bg-[var(--surface)] p-5 shadow-[var(--shadow)] sm:p-8">
-        <div className="grid gap-4 sm:grid-cols-2">
-          <label className="grid gap-2 text-sm font-medium text-[var(--text-strong)]">
-            Name
-            <input
-              required
-              value={name}
-              onChange={(event) => setName(event.target.value)}
-              className="h-11 rounded-md border border-[var(--border)] bg-[var(--surface-muted)] px-3 text-sm text-[var(--text-strong)] outline-none transition placeholder:text-[var(--text)] focus:border-[var(--accent-blue)]"
-              placeholder="Your name"
-            />
-          </label>
-          <label className="grid gap-2 text-sm font-medium text-[var(--text-strong)]">
-            Email
-            <input
-              required
-              type="email"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-              className="h-11 rounded-md border border-[var(--border)] bg-[var(--surface-muted)] px-3 text-sm text-[var(--text-strong)] outline-none transition placeholder:text-[var(--text)] focus:border-[var(--accent-blue)]"
-              placeholder="you@example.com"
-            />
-          </label>
-          <label className="grid gap-2 text-sm font-medium text-[var(--text-strong)] sm:col-span-2">
-            Message
-            <textarea
-              required
-              rows={8}
-              value={body}
-              onChange={(event) => setBody(event.target.value)}
-              className="rounded-md border border-[var(--border)] bg-[var(--surface-muted)] px-3 py-3 text-sm text-[var(--text-strong)] outline-none transition placeholder:text-[var(--text)] focus:border-[var(--accent-blue)]"
-              placeholder="Tell Dessiree about your role, project, or inquiry"
-            />
-          </label>
+      <div className="grid gap-5 lg:grid-cols-[1.15fr_0.85fr]">
+        {/* Left — Contact Form */}
+        <form onSubmit={handleSubmit} className="rounded-xl border border-[var(--border)] bg-[var(--surface)] p-5 shadow-[var(--shadow)] sm:p-8">
+          <div className="flex items-center gap-2 border-b border-[var(--border)] pb-3 font-mono text-xs text-[var(--text)]">
+            <Mail className="h-4 w-4 text-[var(--accent-green)]" />
+            send-message.sh
+          </div>
+          <div className="mt-5 grid gap-4 sm:grid-cols-2">
+            <label className="grid gap-2 text-sm font-medium text-[var(--text-strong)]">
+              Name
+              <input
+                required
+                value={name}
+                onChange={(event) => setName(event.target.value)}
+                className="h-11 rounded-md border border-[var(--border)] bg-[var(--surface-muted)] px-3 text-sm text-[var(--text-strong)] outline-none transition placeholder:text-[var(--text)] focus:border-[var(--accent-blue)]"
+                placeholder="Your name"
+              />
+            </label>
+            <label className="grid gap-2 text-sm font-medium text-[var(--text-strong)]">
+              Email
+              <input
+                required
+                type="email"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+                className="h-11 rounded-md border border-[var(--border)] bg-[var(--surface-muted)] px-3 text-sm text-[var(--text-strong)] outline-none transition placeholder:text-[var(--text)] focus:border-[var(--accent-blue)]"
+                placeholder="you@example.com"
+              />
+            </label>
+            <label className="grid gap-2 text-sm font-medium text-[var(--text-strong)] sm:col-span-2">
+              Message
+              <textarea
+                required
+                rows={6}
+                value={body}
+                onChange={(event) => setBody(event.target.value)}
+                className="rounded-md border border-[var(--border)] bg-[var(--surface-muted)] px-3 py-3 text-sm text-[var(--text-strong)] outline-none transition placeholder:text-[var(--text)] focus:border-[var(--accent-blue)]"
+                placeholder="Tell Dessiree about your role, project, or inquiry"
+              />
+            </label>
 
-          <div className="flex flex-wrap gap-3 sm:col-span-2">
-            <button
-              type="submit"
-              disabled={status === 'loading'}
-              className="inline-flex items-center justify-center gap-2 rounded-md bg-[var(--accent-green)] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[var(--accent-green-hover)] disabled:cursor-not-allowed disabled:opacity-70"
-            >
-              <Mail className="h-4 w-4" />
-              {status === 'loading' ? 'Submitting...' : 'Submit'}
-            </button>
-            <button
-              type="button"
-              onClick={resetForm}
-              className="inline-flex items-center justify-center rounded-md border border-[var(--border)] px-5 py-3 text-sm font-semibold text-[var(--text-strong)] transition hover:border-[var(--accent-blue)] hover:text-[var(--accent-blue)]"
-            >
-              Reset
-            </button>
+            <div className="flex flex-wrap gap-3 sm:col-span-2">
+              <button
+                type="submit"
+                disabled={status === 'loading'}
+                className="inline-flex items-center justify-center gap-2 rounded-md bg-[var(--accent-green)] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[var(--accent-green-hover)] disabled:cursor-not-allowed disabled:opacity-70"
+              >
+                <Mail className="h-4 w-4" />
+                {status === 'loading' ? 'Submitting...' : 'Submit'}
+              </button>
+              <button
+                type="button"
+                onClick={resetForm}
+                className="inline-flex items-center justify-center rounded-md border border-[var(--border)] px-5 py-3 text-sm font-semibold text-[var(--text-strong)] transition hover:border-[var(--accent-blue)] hover:text-[var(--accent-blue)]"
+              >
+                Reset
+              </button>
+            </div>
+          </div>
+
+          <p
+            className={`mt-4 min-h-6 text-sm ${status === 'error' ? 'text-[var(--accent-error)]' : status === 'success' ? 'text-[var(--accent-green)]' : 'text-[var(--text)]'}`}
+            aria-live="polite"
+          >
+            {message}
+          </p>
+        </form>
+
+        {/* Right — Contact Information */}
+        <div className="flex flex-col gap-5">
+          <div className="rounded-xl border border-[var(--border)] bg-[var(--surface)] p-5 shadow-[var(--shadow)]">
+            <div className="flex items-center gap-2 border-b border-[var(--border)] pb-3 font-mono text-xs text-[var(--text)]">
+              <ExternalLink className="h-4 w-4 text-[var(--accent-blue)]" />
+              contact-info.json
+            </div>
+
+            <div className="mt-5 space-y-5">
+              {/* Email */}
+              <div className="flex items-start gap-4">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-[var(--border)] bg-[var(--surface-muted)] text-[var(--accent-green)]">
+                  <Mail className="h-4 w-4" />
+                </span>
+                <div>
+                  <p className="text-sm font-semibold text-[var(--text-strong)]">Email</p>
+                  <a
+                    href={`mailto:${profile.email}`}
+                    onClick={copyEmail}
+                    className="mt-1 block text-sm text-[var(--accent-blue)] transition hover:underline"
+                  >
+                    {emailCopied ? '✓ Copied to clipboard!' : profile.email}
+                  </a>
+                </div>
+              </div>
+
+              {/* Phone */}
+              <div className="flex items-start gap-4">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-[var(--border)] bg-[var(--surface-muted)] text-[var(--accent-green)]">
+                  <Phone className="h-4 w-4" />
+                </span>
+                <div>
+                  <p className="text-sm font-semibold text-[var(--text-strong)]">Phone</p>
+                  <a
+                    href={`tel:${profile.phone.replace(/[^+\d]/g, '')}`}
+                    onClick={handlePhoneClick}
+                    className="mt-1 block text-sm text-[var(--accent-blue)] transition hover:underline"
+                  >
+                    {phoneCopied ? '✓ Copied to clipboard!' : profile.phone}
+                  </a>
+                </div>
+              </div>
+
+              {/* Location */}
+              <div className="flex items-start gap-4">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-[var(--border)] bg-[var(--surface-muted)] text-[var(--accent-green)]">
+                  <MapPin className="h-4 w-4" />
+                </span>
+                <div>
+                  <p className="text-sm font-semibold text-[var(--text-strong)]">Location</p>
+                  <p className="mt-1 text-sm text-[var(--text)]">{profile.location}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Social Links */}
+          <div className="rounded-xl border border-[var(--border)] bg-[var(--surface-muted)] p-5">
+            <p className="font-mono text-xs uppercase tracking-[0.24em] text-[var(--text)]">$ git remote -v</p>
+            <div className="mt-4 grid gap-3 sm:grid-cols-2">
+              <a
+                href={profile.githubUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-3 rounded-lg border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-sm font-medium text-[var(--text-strong)] transition hover:border-[var(--accent-green)] hover:text-[var(--accent-green)]"
+              >
+                <GitHubMark className="h-5 w-5" />
+                GitHub
+              </a>
+              <a
+                href={profile.linkedinUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-3 rounded-lg border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-sm font-medium text-[var(--text-strong)] transition hover:border-[var(--accent-blue)] hover:text-[var(--accent-blue)]"
+              >
+                <LinkedInMark className="h-5 w-5" />
+                LinkedIn
+              </a>
+            </div>
           </div>
         </div>
-
-        <p
-          className={`mt-4 min-h-6 text-sm ${status === 'error' ? 'text-[var(--accent-error)]' : status === 'success' ? 'text-[var(--accent-green)]' : 'text-[var(--text)]'}`}
-          aria-live="polite"
-        >
-          {message}
-        </p>
-      </form>
+      </div>
     </SectionShell>
   )
 }
