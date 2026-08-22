@@ -42,13 +42,14 @@ export function Footer() {
 
   return (
     <footer className="border-t border-[var(--border)] bg-[var(--surface)]">
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-4 px-4 py-8 pb-24 text-sm text-[var(--text)] sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8 lg:pb-8 lg:pr-40">
+      <div className="mx-auto flex w-full max-w-7xl flex-col items-center justify-center gap-4 px-4 py-8 pb-24 text-center text-sm text-[var(--text)] sm:px-6 lg:px-8 lg:pb-8">
+
         <div>
           <p className="text-[var(--text-strong)]">© 2026 Dessiree Camille Pasion</p>
           <p className="mt-1 font-mono text-xs">Built with React • TypeScript • Tailwind CSS • Framer Motion</p>
         </div>
 
-        <nav className="flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-xs" aria-label="Contact links">
+        {/* <nav className="flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-xs" aria-label="Contact links">
           <a href={`mailto:${profile.email}`} onClick={handleEmailClick} className={linkClasses}>
             <Mail className="h-4 w-4" />
             {emailCopied ? 'Copied!' : 'Email'}
@@ -69,7 +70,7 @@ export function Footer() {
             <LinkedInMark className="h-4 w-4" />
             LinkedIn
           </a>
-        </nav>
+        </nav> */}
       </div>
     </footer>
   )
