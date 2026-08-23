@@ -447,10 +447,15 @@ export function ContactSection() {
 
       setStatus('success')
       setMessage('✓ Message sent successfully! Thanks for reaching out. I\'ll get back to you soon.')
-      resetForm()
+      // Do not use resetForm() here immediately if we want to show the success message, 
+      // because resetForm clears the message. We only want to clear the inputs.
+      setName('')
+      setEmail('')
+      setSubject('')
+      setBody('')
     } catch {
       setStatus('error')
-      setMessage('Unable to send message right now. Please try again later.')
+      setMessage('⚠ Something went wrong. Please try again or contact me directly via email.')
     }
   }
 
@@ -485,42 +490,47 @@ export function ContactSection() {
       title="Let's Connect Before I Push Another Commit"
       description="Have a project, job opportunity, or collaboration in mind? Feel free to send me a message."
     >
-      <div className="grid gap-5 lg:grid-cols-[1.15fr_0.85fr]">
+      <div className="grid gap-5 lg:grid-cols-2">
         {/* Left — Contact Form */}
-        <form onSubmit={handleSubmit} className="rounded-xl border border-[var(--border)] bg-[var(--surface)] p-5 shadow-[var(--shadow)] sm:p-8">
+        <form onSubmit={handleSubmit} className="flex flex-col rounded-xl border border-[var(--border)] bg-[var(--surface)] p-5 shadow-[var(--shadow)] sm:p-8">
           <div className="flex items-center gap-2 border-b border-[var(--border)] pb-3 font-mono text-xs text-[var(--text)]">
             <Mail className="h-4 w-4 text-[var(--accent-green)]" />
             send-message.sh
           </div>
-          <div className="mt-5 grid gap-4 sm:grid-cols-2">
+          <div className="mt-5 flex flex-1 flex-col gap-4">
+            <div className="grid gap-4 sm:grid-cols-2">
+              <label className="grid gap-2 text-sm font-medium text-[var(--text-strong)]">
+                Name
+                <input
+                  required
+                  value={name}
+                  onChange={(event) => setName(event.target.value)}
+                  disabled={status === 'loading'}
+                  className="h-11 rounded-md border border-[var(--border)] bg-[var(--surface-muted)] px-3 text-sm text-[var(--text-strong)] outline-none transition placeholder:text-[var(--text)] focus:border-[var(--accent-blue)] disabled:cursor-not-allowed disabled:opacity-50"
+                  placeholder="Your name"
+                />
+              </label>
+              <label className="grid gap-2 text-sm font-medium text-[var(--text-strong)]">
+                Email
+                <input
+                  required
+                  type="email"
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
+                  disabled={status === 'loading'}
+                  className="h-11 rounded-md border border-[var(--border)] bg-[var(--surface-muted)] px-3 text-sm text-[var(--text-strong)] outline-none transition placeholder:text-[var(--text)] focus:border-[var(--accent-blue)] disabled:cursor-not-allowed disabled:opacity-50"
+                  placeholder="you@example.com"
+                />
+              </label>
+            </div>
             <label className="grid gap-2 text-sm font-medium text-[var(--text-strong)]">
-              Name
-              <input
-                required
-                value={name}
-                onChange={(event) => setName(event.target.value)}
-                className="h-11 rounded-md border border-[var(--border)] bg-[var(--surface-muted)] px-3 text-sm text-[var(--text-strong)] outline-none transition placeholder:text-[var(--text)] focus:border-[var(--accent-blue)]"
-                placeholder="Your name"
-              />
-            </label>
-            <label className="grid gap-2 text-sm font-medium text-[var(--text-strong)]">
-              Email
-              <input
-                required
-                type="email"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-                className="h-11 rounded-md border border-[var(--border)] bg-[var(--surface-muted)] px-3 text-sm text-[var(--text-strong)] outline-none transition placeholder:text-[var(--text)] focus:border-[var(--accent-blue)]"
-                placeholder="you@example.com"
-              />
-            </label>
-            <label className="grid gap-2 text-sm font-medium text-[var(--text-strong)] sm:col-span-2">
               What can I help you with?
               <select
                 required
                 value={subject}
                 onChange={(event) => setSubject(event.target.value)}
-                className="h-11 rounded-md border border-[var(--border)] bg-[var(--surface-muted)] px-3 text-sm text-[var(--text-strong)] outline-none transition focus:border-[var(--accent-blue)] [&:invalid]:text-[var(--text)]"
+                disabled={status === 'loading'}
+                className="h-11 rounded-md border border-[var(--border)] bg-[var(--surface-muted)] px-3 text-sm text-[var(--text-strong)] outline-none transition focus:border-[var(--accent-blue)] disabled:cursor-not-allowed disabled:opacity-50 [&:invalid]:text-[var(--text)]"
               >
                 <option value="" disabled>Select inquiry type</option>
                 <option value="Job Opportunity">Job Opportunity</option>
@@ -529,58 +539,69 @@ export function ContactSection() {
                 <option value="General Inquiry">General Inquiry</option>
               </select>
             </label>
-            <label className="grid gap-2 text-sm font-medium text-[var(--text-strong)] sm:col-span-2">
+            <label className="flex flex-1 flex-col gap-2 text-sm font-medium text-[var(--text-strong)]">
               Message
               <textarea
                 required
-                rows={2}
                 value={body}
                 onChange={(event) => setBody(event.target.value)}
-                className="rounded-md border border-[var(--border)] bg-[var(--surface-muted)] px-3 py-3 text-sm text-[var(--text-strong)] outline-none transition placeholder:text-[var(--text)] focus:border-[var(--accent-blue)]"
-                placeholder="Tell Dessiree about your role, project, or inquiry"
+                disabled={status === 'loading'}
+                className="min-h-[100px] flex-1 rounded-md border border-[var(--border)] bg-[var(--surface-muted)] px-3 py-3 text-sm text-[var(--text-strong)] outline-none transition placeholder:text-[var(--text)] focus:border-[var(--accent-blue)] disabled:cursor-not-allowed disabled:opacity-50"
+                placeholder="Tell me about your role, project, or inquiry"
               />
             </label>
 
-            <div className="flex flex-wrap gap-3 sm:col-span-2">
+            <div className="mt-2 flex flex-wrap gap-3">
               <button
                 type="submit"
                 disabled={status === 'loading'}
                 className="inline-flex items-center justify-center gap-2 rounded-md bg-[var(--accent-green)] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[var(--accent-green-hover)] disabled:cursor-not-allowed disabled:opacity-70"
               >
-                <Mail className="h-4 w-4" />
-                {status === 'loading' ? 'Submitting...' : 'Submit'}
+                {status === 'loading' ? (
+                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                ) : (
+                  <Mail className="h-4 w-4" />
+                )}
+                {status === 'loading' ? 'Sending...' : 'Send Message'}
               </button>
               <button
                 type="button"
                 onClick={resetForm}
-                className="inline-flex items-center justify-center rounded-md border border-[var(--border)] px-5 py-3 text-sm font-semibold text-[var(--text-strong)] transition hover:border-[var(--accent-blue)] hover:text-[var(--accent-blue)]"
+                disabled={status === 'loading'}
+                className="inline-flex items-center justify-center rounded-md border border-[var(--border)] px-5 py-3 text-sm font-semibold text-[var(--text-strong)] transition hover:border-[var(--accent-blue)] hover:text-[var(--accent-blue)] disabled:cursor-not-allowed disabled:opacity-50"
               >
                 Reset
               </button>
             </div>
-          </div>
 
-          <p
-            className={`mt-4 min-h-6 text-sm ${status === 'error' ? 'text-[var(--accent-error)]' : status === 'success' ? 'text-[var(--accent-green)]' : 'text-[var(--text)]'}`}
-            aria-live="polite"
-          >
-            {message}
-          </p>
+            {message && (
+              <div
+                className={`mt-2 rounded-md border px-4 py-3 text-sm ${
+                  status === 'error'
+                    ? 'border-[color-mix(in_srgb,var(--accent-error)_30%,var(--border))] bg-[color-mix(in_srgb,var(--accent-error)_10%,var(--surface))] text-[var(--accent-error)]'
+                    : 'border-[color-mix(in_srgb,var(--accent-green)_30%,var(--border))] bg-[color-mix(in_srgb,var(--accent-green)_10%,var(--surface))] text-[var(--accent-green)]'
+                }`}
+                aria-live="polite"
+              >
+                {message}
+              </div>
+            )}
+          </div>
         </form>
 
         {/* Right — Contact Information */}
-        <div className="flex flex-col gap-5">
-          <div className="rounded-xl border border-[var(--border)] bg-[var(--surface)] p-5 shadow-[var(--shadow)]">
+        <div className="flex flex-col gap-5 h-full">
+          <div className="flex-1 rounded-xl border border-[var(--border)] bg-[var(--surface)] p-5 shadow-[var(--shadow)] sm:p-8">
             <div className="flex items-center gap-2 border-b border-[var(--border)] pb-3 font-mono text-xs text-[var(--text)]">
               <ExternalLink className="h-4 w-4 text-[var(--accent-blue)]" />
               contact-info.json
             </div>
 
-            <div className="mt-5 space-y-5">
+            <div className="mt-6 flex flex-col justify-around gap-6 h-[calc(100%-3rem)]">
               {/* Email */}
-              <div className="flex items-start gap-4">
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-[var(--border)] bg-[var(--surface-muted)] text-[var(--accent-green)]">
-                  <Mail className="h-4 w-4" />
+              <div className="flex items-center gap-4">
+                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg border border-[var(--border)] bg-[var(--surface-muted)] text-[var(--accent-green)]">
+                  <Mail className="h-5 w-5" />
                 </span>
                 <div>
                   <p className="text-sm font-semibold text-[var(--text-strong)]">Email</p>
@@ -595,9 +616,9 @@ export function ContactSection() {
               </div>
 
               {/* Phone */}
-              <div className="flex items-start gap-4">
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-[var(--border)] bg-[var(--surface-muted)] text-[var(--accent-green)]">
-                  <Phone className="h-4 w-4" />
+              <div className="flex items-center gap-4">
+                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg border border-[var(--border)] bg-[var(--surface-muted)] text-[var(--accent-green)]">
+                  <Phone className="h-5 w-5" />
                 </span>
                 <div>
                   <p className="text-sm font-semibold text-[var(--text-strong)]">Phone</p>
@@ -612,9 +633,9 @@ export function ContactSection() {
               </div>
 
               {/* Location */}
-              <div className="flex items-start gap-4">
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-[var(--border)] bg-[var(--surface-muted)] text-[var(--accent-green)]">
-                  <MapPin className="h-4 w-4" />
+              <div className="flex items-center gap-4">
+                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg border border-[var(--border)] bg-[var(--surface-muted)] text-[var(--accent-green)]">
+                  <MapPin className="h-5 w-5" />
                 </span>
                 <div>
                   <p className="text-sm font-semibold text-[var(--text-strong)]">Location</p>
@@ -625,14 +646,14 @@ export function ContactSection() {
           </div>
 
           {/* Social Links */}
-          <div className="rounded-xl border border-[var(--border)] bg-[var(--surface-muted)] p-5">
+          <div className="rounded-xl border border-[var(--border)] bg-[var(--surface-muted)] p-5 sm:px-8 sm:py-6">
             <p className="font-mono text-xs uppercase tracking-[0.24em] text-[var(--text)]">$ git remote -v</p>
             <div className="mt-4 grid gap-3 sm:grid-cols-2">
               <a
                 href={profile.githubUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-3 rounded-lg border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-sm font-medium text-[var(--text-strong)] transition hover:border-[var(--accent-green)] hover:text-[var(--accent-green)]"
+                className="inline-flex items-center justify-center gap-3 rounded-lg border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-sm font-medium text-[var(--text-strong)] transition hover:border-[var(--accent-green)] hover:text-[var(--accent-green)]"
               >
                 <GitHubMark className="h-5 w-5" />
                 GitHub
@@ -641,7 +662,7 @@ export function ContactSection() {
                 href={profile.linkedinUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-3 rounded-lg border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-sm font-medium text-[var(--text-strong)] transition hover:border-[var(--accent-blue)] hover:text-[var(--accent-blue)]"
+                className="inline-flex items-center justify-center gap-3 rounded-lg border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-sm font-medium text-[var(--text-strong)] transition hover:border-[var(--accent-blue)] hover:text-[var(--accent-blue)]"
               >
                 <LinkedInMark className="h-5 w-5" />
                 LinkedIn
