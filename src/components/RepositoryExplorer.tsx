@@ -31,13 +31,14 @@ export function RepositoryExplorer({ onNavigate }: RepositoryExplorerProps) {
 
   const renderNode = (node: TreeNode, depth = 0): React.ReactNode => {
     const isFolder = Boolean(node.children?.length)
-    const isOpen = node.label === 'dessiree-portfolio' || openFolders[node.label]
+    const isOpen = Boolean(openFolders[node.label])
     const paddingLeft = `calc(0.5rem + ${depth * 1.1}rem)`
 
     return (
       <div key={`${node.label}-${depth}`}>
         <button
           type="button"
+          aria-expanded={isFolder ? isOpen : undefined}
           onClick={() => {
             if (isFolder) {
               setOpenFolders((current) => ({ ...current, [node.label]: !current[node.label] }))
@@ -62,9 +63,17 @@ export function RepositoryExplorer({ onNavigate }: RepositoryExplorerProps) {
           <span className="font-mono text-sm">{node.label}</span>
         </button>
 
-        {isFolder && isOpen && node.children ? (
-          <div className="mt-1 border-l border-[var(--border)]">
-            {node.children.map((child) => renderNode(child, depth + 1))}
+        {isFolder && node.children ? (
+          <div 
+            className={`grid transition-all duration-300 ease-in-out ${
+              isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
+            }`}
+          >
+            <div className="overflow-hidden">
+              <div className="mt-1 border-l border-[var(--border)]">
+                {node.children.map((child) => renderNode(child, depth + 1))}
+              </div>
+            </div>
           </div>
         ) : null}
       </div>
