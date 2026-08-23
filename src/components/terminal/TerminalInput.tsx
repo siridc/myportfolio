@@ -21,9 +21,15 @@ export function TerminalInput({
   const [input, setInput] = useState('')
   const inputRef = useRef<HTMLInputElement>(null)
 
-  // Focus input automatically, but we might want this managed externally too
+  // Focus input automatically and ensure it remains visible on mobile
   useEffect(() => {
-    inputRef.current?.focus()
+    const timeout = setTimeout(() => {
+      inputRef.current?.focus()
+      // Helps iOS Safari bring the input into the visual viewport if covered by keyboard
+      inputRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+    }, 150)
+    
+    return () => clearTimeout(timeout)
   }, [])
 
   const handleSubmit = (e: FormEvent) => {
@@ -67,7 +73,7 @@ export function TerminalInput({
         value={input}
         onChange={(e) => setInput(e.target.value)}
         onKeyDown={handleKeyDown}
-        className="flex-1 bg-transparent font-mono text-sm text-[var(--text-strong)] outline-none placeholder:text-[var(--text)]/50"
+        className="flex-1 bg-transparent font-mono text-base sm:text-sm text-[var(--text-strong)] outline-none placeholder:text-[var(--text)]/50"
         placeholder="Type command here..."
         autoFocus
         autoComplete="off"

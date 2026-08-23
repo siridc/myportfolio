@@ -1,7 +1,6 @@
 import type { Command } from '../../types/terminal'
 import { profile } from '../../data/profile'
 import { projects } from '../../data/projects'
-import { skillGroups } from '../../data/skills'
 
 const navigationCommands = [
   'about', 'education', 'skills', 'projects', 'experience', 'credentials', 'contact'
@@ -32,7 +31,6 @@ export const commands: Command[] = [
           { id: crypto.randomUUID(), type: 'system', content: 'Tips:' },
           { id: crypto.randomUUID(), type: 'system', content: '- Use Tab for autocomplete.' },
           { id: crypto.randomUUID(), type: 'system', content: '- Use ↑ / ↓ for command history.' },
-          { id: crypto.randomUUID(), type: 'system', content: '- Type "tour" for a guided experience.' },
         ]
       }
     }
@@ -235,28 +233,13 @@ export const commands: Command[] = [
     }
   },
   {
-    name: 'tour',
-    description: 'Guided portfolio experience',
-    execute: () => {
-      return {
-        lines: [
-          { id: crypto.randomUUID(), type: 'system', content: 'Starting tour...' },
-          { id: crypto.randomUUID(), type: 'output', content: 'Step 1 of 5: About Me' },
-          { id: crypto.randomUUID(), type: 'system', content: 'Navigating to About...' }
-        ],
-        navigateTo: 'about',
-        closeTerminal: true
-      }
-    }
-  },
-  {
     name: 'whoami',
     description: 'Who am I?',
     execute: () => {
       return {
         lines: [
           { id: crypto.randomUUID(), type: 'output', content: profile.name },
-          { id: crypto.randomUUID(), type: 'output', content: profile.role }
+          { id: crypto.randomUUID(), type: 'output', content: profile.title }
         ]
       }
     }

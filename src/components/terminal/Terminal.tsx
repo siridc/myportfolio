@@ -36,9 +36,9 @@ export function Terminal({ isOpen, onClose, onNavigate, onToggleTheme }: Termina
   useEffect(() => {
     if (isOpen) {
       setState(s => {
-        // Clean up temporary navigation messages so they don't persist on reopen
+        // Clean up temporary navigation and opening messages so they don't persist on reopen
         const cleanedOutput = s.output.filter(line => 
-          !(typeof line.content === 'string' && line.content.startsWith('Navigating to '))
+          !(typeof line.content === 'string' && (line.content.startsWith('Navigating to ') || line.content.startsWith('Opening ')))
         )
         return { ...s, isOpen: true, isHelpOpen: false, output: cleanedOutput }
       })
