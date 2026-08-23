@@ -1,5 +1,5 @@
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
-import { ExternalLink, FileText, GraduationCap, Mail, MapPin, Phone } from 'lucide-react'
+import { ExternalLink, FileText, GraduationCap, Mail, MapPin } from 'lucide-react'
 import { useEffect, useRef, useState, type FormEvent, type ReactNode } from 'react'
 import { education } from '../data/education'
 import { certifications, leadership } from '../data/credentials'
@@ -411,7 +411,6 @@ export function ContactSection() {
   const [body, setBody] = useState('')
   const [subject, setSubject] = useState('')
   const [emailCopied, setEmailCopied] = useState(false)
-  const [phoneCopied, setPhoneCopied] = useState(false)
 
   const resetForm = () => {
     setName('')
@@ -464,20 +463,6 @@ export function ContactSection() {
       await navigator.clipboard.writeText(profile.email)
       setEmailCopied(true)
       window.setTimeout(() => setEmailCopied(false), 1800)
-    } catch {
-      // clipboard unavailable
-    }
-  }
-
-  async function handlePhoneClick(event: React.MouseEvent<HTMLAnchorElement>) {
-    const isTouchDevice = window.matchMedia('(pointer: coarse)').matches
-    if (isTouchDevice) return // let the tel: link open the dialer
-
-    event.preventDefault()
-    try {
-      await navigator.clipboard.writeText(profile.phone)
-      setPhoneCopied(true)
-      window.setTimeout(() => setPhoneCopied(false), 1800)
     } catch {
       // clipboard unavailable
     }
@@ -597,7 +582,7 @@ export function ContactSection() {
               contact-info.json
             </div>
 
-            <div className="mt-6 flex flex-col justify-around gap-6 h-[calc(100%-3rem)]">
+            <div className="mt-6 flex flex-col justify-center gap-10 h-[calc(100%-3rem)]">
               {/* Email */}
               <div className="flex items-center gap-4">
                 <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg border border-[var(--border)] bg-[var(--surface-muted)] text-[var(--accent-green)]">
@@ -611,23 +596,6 @@ export function ContactSection() {
                     className="mt-1 block text-sm text-[var(--accent-blue)] transition hover:underline"
                   >
                     {emailCopied ? '✓ Copied to clipboard!' : profile.email}
-                  </a>
-                </div>
-              </div>
-
-              {/* Phone */}
-              <div className="flex items-center gap-4">
-                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg border border-[var(--border)] bg-[var(--surface-muted)] text-[var(--accent-green)]">
-                  <Phone className="h-5 w-5" />
-                </span>
-                <div>
-                  <p className="text-sm font-semibold text-[var(--text-strong)]">Phone</p>
-                  <a
-                    href={`tel:${profile.phone.replace(/[^+\d]/g, '')}`}
-                    onClick={handlePhoneClick}
-                    className="mt-1 block text-sm text-[var(--accent-blue)] transition hover:underline"
-                  >
-                    {phoneCopied ? '✓ Copied to clipboard!' : profile.phone}
                   </a>
                 </div>
               </div>
