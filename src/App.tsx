@@ -13,7 +13,7 @@ import {
   ProjectsSection,
   SkillsSection,
 } from './components/Sections'
-import { Terminal } from './components/Terminal'
+import { Terminal } from './components/terminal/Terminal'
 import { profile } from './data/profile'
 import { useTheme } from './hooks/useTheme'
 
@@ -160,7 +160,7 @@ function App() {
         isOpen={terminalOpen}
         onClose={() => setTerminalOpen(false)}
         onNavigate={scrollToSection}
-        onOpenResume={openResume}
+        onToggleTheme={toggleTheme}
       />
 
       <CommandPalette
