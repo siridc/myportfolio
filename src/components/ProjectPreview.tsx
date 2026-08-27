@@ -79,11 +79,11 @@ export function ProjectPreview({ projectName, slides, presentation, onOpen }: Pr
         scale: isPressed ? 1.025 : isInteractive ? 1.015 : 1,
       }}
       transition={{ type: 'spring', stiffness: 240, damping: 24, mass: 0.8 }}
-      className="group relative mt-4 block aspect-[16/9] w-full overflow-hidden rounded-xl border border-[var(--border)] bg-[linear-gradient(145deg,color-mix(in_srgb,var(--surface)_92%,var(--accent-blue)),var(--surface-muted))] text-left shadow-[0_12px_35px_rgba(0,0,0,0.16)] focus-visible:ring-2 focus-visible:ring-[var(--accent-blue)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface)]"
+      className="group relative block aspect-[16/9] w-full overflow-hidden rounded-xl border border-[var(--border)] bg-[linear-gradient(145deg,color-mix(in_srgb,var(--surface)_92%,var(--accent-blue)),var(--surface-muted))] text-left shadow-[0_12px_35px_rgba(0,0,0,0.16)] focus-visible:ring-2 focus-visible:ring-[var(--accent-blue)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface)]"
       aria-label={`View ${projectName} project showcase`}
     >
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_18%,color-mix(in_srgb,var(--accent-green)_18%,transparent),transparent_36%),radial-gradient(circle_at_82%_75%,color-mix(in_srgb,var(--accent-purple)_18%,transparent),transparent_38%)]" />
-      <div className="absolute inset-x-4 top-3 flex items-center justify-between font-mono text-[9px] uppercase tracking-[0.18em] text-[var(--text)] sm:inset-x-5 sm:top-4 sm:text-[10px]">
+      <div className="absolute inset-x-4 top-3 z-20 flex items-center justify-between font-mono text-[9px] uppercase tracking-[0.18em] text-[var(--text-strong)] sm:inset-x-5 sm:top-4 sm:text-[10px]">
         <span>Interactive preview</span>
         <span>{activeIndex + 1} / {slides.length}</span>
       </div>
@@ -131,8 +131,8 @@ export function ProjectPreview({ projectName, slides, presentation, onOpen }: Pr
       </div>
 
       <motion.span
-        className="pointer-events-none absolute bottom-3 right-3 rounded-full border border-white/20 bg-black/55 px-2.5 py-1 font-mono text-[9px] uppercase tracking-[0.12em] text-white shadow-lg backdrop-blur sm:bottom-4 sm:right-4 sm:text-[10px]"
-        animate={shouldReduceMotion ? undefined : { x: isInteractive || isPressed ? -3 : 0, opacity: isInteractive || isPressed ? 1 : 0.82 }}
+        className="pointer-events-none absolute bottom-3 right-3 z-30 rounded-full border border-white/30 bg-black/80 px-3 py-1 font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-white shadow-xl backdrop-blur-md sm:bottom-4 sm:right-4 sm:text-xs"
+        animate={shouldReduceMotion ? undefined : { x: isInteractive || isPressed ? -3 : 0, scale: isInteractive || isPressed ? 1.05 : 1 }}
       >
         Tap to explore
       </motion.span>

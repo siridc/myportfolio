@@ -172,72 +172,93 @@ export function ProjectsSection() {
     setActiveProjectIndex(projectIndex)
   }
 
+  const capstone = projects[0]
+
   return (
     <>
       <SectionShell
         id="projects"
-        eyebrow="projects/"
+        eyebrow="projects/capstone"
         title="Projects"
         description=" "
       >
-        <div className="grid gap-5 lg:grid-cols-2">
-          {projects.map((project, projectIndex) => (
-            <article key={project.name} className="overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow)]">
-              <div className="border-b border-[var(--border)] bg-[linear-gradient(135deg,rgba(63,185,80,0.18),rgba(88,166,255,0.12),rgba(163,113,247,0.12))] p-5">
-                <div className="flex items-center justify-between gap-3">
-                  <div>
-                    <p className="font-mono text-xs uppercase tracking-[0.24em] text-[var(--text)]">branch: main</p>
-                    <h3 className="mt-2 text-xl font-semibold text-[var(--text-strong)]">{project.name}</h3>
-                  </div>
-                  <Tag tone={project.status === 'Capstone' ? 'green' : 'blue'}>{project.status}</Tag>
-                </div>
+        {capstone && (
+          <article className="overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow)]">
+            <div className="grid gap-6 p-6 lg:grid-cols-[1.1fr_0.9fr] lg:p-8">
+              {/* Left Column: Interactive Mobile Preview */}
+              <div className="flex flex-col justify-center">
                 <ProjectPreview
-                  projectName={project.name}
-                  slides={project.showcase}
-                  presentation={project.presentation}
-                  onOpen={(trigger) => openShowcase(projectIndex, trigger)}
+                  projectName={capstone.name}
+                  slides={capstone.showcase}
+                  presentation={capstone.presentation}
+                  onOpen={(trigger) => openShowcase(0, trigger)}
                 />
               </div>
-              <div className="space-y-4 p-5">
-                <p className="text-sm leading-7 text-[var(--text-strong)]">{project.description}</p>
-                <p className="text-sm leading-7 text-[var(--text)]">Problem solved: {project.problem}</p>
-                <div className="flex flex-wrap gap-2">
-                  {project.technologies.map((technology) => (
-                    <Tag key={technology} tone="blue">
-                      {technology}
-                    </Tag>
-                  ))}
+
+              {/* Right Column: Project Details & Actions */}
+              <div className="flex flex-col justify-between space-y-5">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between gap-3">
+                    <p className="font-mono text-xs uppercase tracking-[0.24em] text-[var(--accent-green)]">branch: main</p>
+                    <Tag tone="green">Capstone</Tag>
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-[var(--text-strong)] sm:text-2xl">{capstone.name}</h3>
+                    <p className="mt-2 text-sm leading-7 text-[var(--text-strong)]">{capstone.description}</p>
+                  </div>
+                  <p className="text-sm leading-6 text-[var(--text)]">
+                    <strong className="text-[var(--text-strong)]">Problem solved:</strong> {capstone.problem}
+                  </p>
+
+                  <div>
+                    <p className="mb-2 font-mono text-xs uppercase tracking-[0.16em] text-[var(--text)]">Technologies</p>
+                    <div className="flex flex-wrap gap-2">
+                      {capstone.technologies.map((technology) => (
+                        <Tag key={technology} tone="blue">
+                          {technology}
+                        </Tag>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <p className="mb-2 font-mono text-xs uppercase tracking-[0.16em] text-[var(--text)]">Key Features</p>
+                    <ul className="space-y-2 text-sm leading-6 text-[var(--text)]">
+                      {capstone.features.map((feature) => (
+                        <li key={feature} className="flex items-start gap-2.5">
+                          <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full aspect-square bg-[var(--accent-green)]" />
+                          <span className="flex-1">{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
-                <ul className="space-y-2 text-sm leading-6 text-[var(--text)]">
-                  {project.features.map((feature) => (
-                    <li key={feature} className="flex gap-2">
-                      <span className="mt-2 h-2 w-2 rounded-full bg-[var(--accent-green)]" />
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-                <div className="flex flex-wrap gap-3">
-                  <button
-                    type="button"
-                    onClick={(event) => openShowcase(projectIndex, event.currentTarget)}
-                    className="inline-flex items-center gap-2 rounded-md border border-[var(--border)] px-4 py-2 text-sm font-medium text-[var(--text-strong)]"
+
+                <div className="flex flex-wrap gap-3 pt-2">
+                  <a
+                    href={capstone.liveUrl || 'https://truehue.vercel.app'}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-2 rounded-md bg-[var(--accent-green)] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[var(--accent-green-hover)]"
+                    style={{ color: 'white' }}
                   >
                     <ExternalLink className="h-4 w-4" />
                     View Project
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => window.open(project.githubUrl || profile.githubUrl, '_blank', 'noopener,noreferrer')}
-                    className="inline-flex items-center gap-2 rounded-md border border-[var(--border)] px-4 py-2 text-sm font-medium text-[var(--text-strong)]"
+                  </a>
+                  <a
+                    href={capstone.githubUrl || profile.githubUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-2 rounded-md border border-[var(--border)] bg-[var(--surface-muted)] px-5 py-2.5 text-sm font-medium text-[var(--text-strong)] transition hover:border-[var(--accent-blue)] hover:text-[var(--accent-blue)]"
                   >
                     <GitHubMark className="h-4 w-4" />
                     GitHub
-                  </button>
+                  </a>
                 </div>
               </div>
-            </article>
-          ))}
-        </div>
+            </div>
+          </article>
+        )}
 
         {/* GitHub Repositories */}
         <div className="mt-10 rounded-xl border border-[var(--border)] bg-[var(--surface)] p-5 shadow-[var(--shadow)]">
@@ -259,31 +280,56 @@ export function ProjectsSection() {
           ) : null}
 
           <div className="mt-5 grid gap-4 lg:grid-cols-2">
-            {repositories.map((repository) => (
-              <article key={repository.html_url} className="rounded-lg border border-[var(--border)] bg-[var(--surface-muted)] p-4">
-                <div className="flex items-start justify-between gap-3">
+            {repositories.map((repository) => {
+              const repoTechMap: Record<string, string[]> = {
+                myportfolio: ['React', 'TypeScript', 'Tailwind CSS', 'Vite', 'Framer Motion'],
+                'gourmet-discoveries': ['React', 'Vite', 'JavaScript', 'HTML', 'CSS'],
+                'simple-calculator': ['HTML', 'CSS', 'JavaScript'],
+                studentrecord: ['PHP', 'MySQL'],
+              }
+
+              const normalizedKey = repository.name.toLowerCase().replace(/[^a-z0-9]/g, '')
+              const techStack =
+                repoTechMap[normalizedKey] ||
+                repoTechMap[repository.name.toLowerCase()] ||
+                (repository.language ? [repository.language] : [])
+
+              const description =
+                repository.description ??
+                (repository.name.toLowerCase() === 'myportfolio'
+                  ? 'Modern developer portfolio built with React, TypeScript, Tailwind CSS, Vite, and Framer Motion.'
+                  : 'No description available.')
+
+              return (
+                <article key={repository.html_url} className="flex flex-col justify-between rounded-lg border border-[var(--border)] bg-[var(--surface-muted)] p-4">
                   <div>
-                    <h4 className="text-base font-semibold text-[var(--text-strong)]">{repository.name}</h4>
-                    <p className="mt-1 text-sm leading-6 text-[var(--text)]">{repository.description ?? 'No description available.'}</p>
+                    <div className="flex items-start justify-between gap-3">
+                      <h4 className="text-base font-semibold text-[var(--text-strong)]">{repository.name}</h4>
+                      <GitHubMark className="mt-0.5 h-4 w-4 shrink-0 text-[var(--text)]" />
+                    </div>
+                    <p className="mt-1.5 text-sm leading-6 text-[var(--text)]">{description}</p>
+                    {techStack.length > 0 && (
+                      <div className="mt-3 flex flex-wrap gap-1.5">
+                        {techStack.map((tech) => (
+                          <Tag key={tech} tone="blue">
+                            {tech}
+                          </Tag>
+                        ))}
+                      </div>
+                    )}
                   </div>
-                  <Tag tone="blue">{repository.language ?? 'Repo'}</Tag>
-                </div>
-                <div className="mt-4 flex flex-wrap gap-3 text-xs font-mono text-[var(--text)]">
-                  <span>stars: {repository.stargazers_count}</span>
-                  <span>forks: {repository.forks_count}</span>
-                  <span>updated: {new Date(repository.updated_at).toLocaleDateString()}</span>
-                </div>
-                <a
-                  href={repository.html_url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-[var(--accent-blue)]"
-                >
-                  Open repository
-                  <ExternalLink className="h-4 w-4" />
-                </a>
-              </article>
-            ))}
+                  <a
+                    href={repository.html_url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-[var(--accent-blue)] transition hover:underline"
+                  >
+                    Open repository
+                    <ExternalLink className="h-4 w-4" />
+                  </a>
+                </article>
+              )
+            })}
           </div>
         </div>
       </SectionShell>
@@ -309,26 +355,20 @@ export function ExperienceSection() {
       title="Experience"
       description=" "
     >
-      <div className="relative border-l border-[var(--border)] pl-6">
+      <div className="space-y-4">
         {experience.map((item) => (
-          <article key={`${item.organization}-${item.role}`} className="relative pb-8 last:pb-0">
-            <span className="absolute -left-[1.55rem] top-1 h-3.5 w-3.5 rounded-full border-4 border-[var(--bg)] bg-[var(--accent-green)]" />
-            <div className="rounded-xl border border-[var(--border)] bg-[var(--surface)] p-5 shadow-[var(--shadow)]">
-              <div className="flex flex-wrap items-center justify-between gap-3">
-                <div>
-                  <h3 className="text-lg font-semibold text-[var(--text-strong)]">{item.organization}</h3>
-                  <p className="text-sm text-[var(--text)]">{item.role}</p>
-                </div>
-                <Tag tone="green">{item.dates}</Tag>
+          <article key={`${item.organization}-${item.role}`} className="rounded-xl border border-[var(--border)] bg-[var(--surface)] p-5 shadow-[var(--shadow)]">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <h3 className="text-lg font-semibold text-[var(--text-strong)]">{item.organization}</h3>
+                <p className="text-sm text-[var(--text)]">{item.role}</p>
               </div>
-              <ul className="mt-4 space-y-2 text-sm leading-6 text-[var(--text)]">
-                {item.summary.map((line) => (
-                  <li key={line} className="flex gap-2">
-                    <span className="mt-2 h-2 w-2 rounded-full bg-[var(--accent-green)]" />
-                    {line}
-                  </li>
-                ))}
-              </ul>
+              <Tag tone="green">{item.dates}</Tag>
+            </div>
+            <div className="mt-4 space-y-2 text-sm leading-6 text-[var(--text)]">
+              {item.summary.map((line) => (
+                <p key={line}>{line}</p>
+              ))}
             </div>
           </article>
         ))}
@@ -379,9 +419,9 @@ export function CredentialsSection() {
           <h3 className="text-lg font-semibold text-[var(--text-strong)]">Certifications</h3>
           <ul className="mt-4 space-y-3 text-sm leading-7 text-[var(--text)]">
             {certifications.map((item) => (
-              <li key={item} className="flex gap-2">
-                <span className="mt-2 h-2 w-2 rounded-full bg-[var(--accent-green)]" />
-                {item}
+              <li key={item} className="flex items-start gap-2.5">
+                <span className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full aspect-square bg-[var(--accent-green)]" />
+                <span className="flex-1">{item}</span>
               </li>
             ))}
           </ul>
@@ -391,9 +431,9 @@ export function CredentialsSection() {
           <h3 className="text-lg font-semibold text-[var(--text-strong)]">Leadership Experience</h3>
           <ul className="mt-4 space-y-3 text-sm leading-7 text-[var(--text)]">
             {leadership.map((item) => (
-              <li key={item} className="flex gap-2">
-                <span className="mt-2 h-2 w-2 rounded-full bg-[var(--accent-blue)]" />
-                {item}
+              <li key={item} className="flex items-start gap-2.5">
+                <span className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full aspect-square bg-[var(--accent-blue)]" />
+                <span className="flex-1">{item}</span>
               </li>
             ))}
           </ul>

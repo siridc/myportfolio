@@ -1,6 +1,6 @@
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { Search } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { commandItems } from '../data/navigation'
 
 type CommandPaletteProps = {
@@ -20,6 +20,17 @@ export function CommandPalette({
 }: CommandPaletteProps) {
   const shouldReduceMotion = useReducedMotion()
   const [query, setQuery] = useState('')
+
+  useEffect(() => {
+    if (!isOpen) return
+
+    const originalOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+
+    return () => {
+      document.body.style.overflow = originalOverflow
+    }
+  }, [isOpen])
 
   const filteredCommands = useMemo(
     () =>

@@ -83,16 +83,16 @@ On branch main
             <p className="font-mono text-xs uppercase tracking-[0.24em] text-[var(--text)]">Now available</p>
             <ul className="mt-4 space-y-3 text-sm text-[var(--text-strong)]">
               <li className="flex items-start gap-3">
-                <span className="mt-1 h-2.5 w-2.5 rounded-full bg-[var(--accent-green)]" />
-                Git-inspired navigation and repository explorer
+                <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full aspect-square bg-[var(--accent-green)]" />
+                <span className="flex-1">Git-inspired navigation and repository explorer</span>
               </li>
               <li className="flex items-start gap-3">
-                <span className="mt-1 h-2.5 w-2.5 rounded-full bg-[var(--accent-blue)]" />
-                Theme toggle with persistent preference
+                <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full aspect-square bg-[var(--accent-blue)]" />
+                <span className="flex-1">Theme toggle with persistent preference</span>
               </li>
               <li className="flex items-start gap-3">
-                <span className="mt-1 h-2.5 w-2.5 rounded-full bg-[var(--accent-purple)]" />
-                GitHub API-ready activity section
+                <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full aspect-square bg-[var(--accent-purple)]" />
+                <span className="flex-1">GitHub API-ready activity section</span>
               </li>
             </ul>
           </div>

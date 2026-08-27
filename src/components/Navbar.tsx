@@ -89,13 +89,18 @@ export function Navbar({
               <a
                 href={profile.resumeUrl}
                 download={profile.resumeDownloadName}
-                className="col-span-1 inline-flex items-center justify-center gap-2 rounded-md bg-[var(--accent-green)] px-4 py-3 text-sm font-semibold text-white"
+                className="col-span-1 inline-flex items-center justify-center gap-2 rounded-md bg-[var(--accent-green)] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[var(--accent-green-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-blue)]"
                 style={{ color: 'white' }}
               >
-                <NotebookTabs className="h-4 w-4" />
+                <NotebookTabs className="h-4 w-4 shrink-0" />
                 Resume
               </a>
-              <ThemeToggle isDark={isDark} onToggle={onToggleTheme} />
+              <ThemeToggle
+                isDark={isDark}
+                onToggle={onToggleTheme}
+                showLabel
+                className="col-span-1 inline-flex items-center justify-center gap-2 rounded-md border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-sm font-semibold text-[var(--text-strong)] transition hover:border-[var(--accent-blue)] hover:text-[var(--accent-blue)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-blue)]"
+              />
             </div>
           </nav>
         </div>
