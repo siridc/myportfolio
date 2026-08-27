@@ -9,12 +9,68 @@ export type GithubRepository = {
   updated_at: string
   archived: boolean
   fork: boolean
+  homepage?: string | null
 }
+
+const fallbackRepositories: GithubRepository[] = [
+  {
+    name: 'Gourmet-Discoveries',
+    description: 'A recipe and restaurant discovery web application built with React and Vite.',
+    html_url: 'https://github.com/siridc/Gourmet-Discoveries',
+    language: 'JavaScript',
+    stargazers_count: 0,
+    forks_count: 0,
+    pushed_at: '',
+    updated_at: '',
+    archived: false,
+    fork: false,
+    homepage: 'https://gourmet-discoveries.vercel.app/',
+  },
+  {
+    name: 'Simple-Calculator',
+    description: 'A clean and responsive web calculator built with HTML, CSS, and JavaScript.',
+    html_url: 'https://github.com/siridc/Simple-Calculator',
+    language: 'JavaScript',
+    stargazers_count: 0,
+    forks_count: 0,
+    pushed_at: '',
+    updated_at: '',
+    archived: false,
+    fork: false,
+    homepage: 'https://siridc.github.io/Simple-Calculator/',
+  },
+  {
+    name: 'myportfolio',
+    description: 'Modern developer portfolio built with React, TypeScript, Tailwind CSS, Vite, and Framer Motion.',
+    html_url: 'https://github.com/siridc/myportfolio',
+    language: 'TypeScript',
+    stargazers_count: 0,
+    forks_count: 0,
+    pushed_at: '',
+    updated_at: '',
+    archived: false,
+    fork: false,
+    homepage: null,
+  },
+  {
+    name: 'StudentRecord',
+    description: 'Student record management system built with PHP and MySQL.',
+    html_url: 'https://github.com/siridc/StudentRecord',
+    language: 'PHP',
+    stargazers_count: 0,
+    forks_count: 0,
+    pushed_at: '',
+    updated_at: '',
+    archived: false,
+    fork: false,
+    homepage: null,
+  },
+]
 
 export async function fetchGithubRepositories(username: string) {
   if (!username) {
     return {
-      repositories: [] as GithubRepository[],
+      repositories: fallbackRepositories,
       error: null as string | null,
     }
   }
@@ -45,16 +101,13 @@ export async function fetchGithubRepositories(username: string) {
       .slice(0, 4)
 
     return {
-      repositories: filteredRepositories,
+      repositories: filteredRepositories.length > 0 ? filteredRepositories : fallbackRepositories,
       error: null as string | null,
     }
-  } catch (error) {
+  } catch {
     return {
-      repositories: [] as GithubRepository[],
-      error:
-        error instanceof Error
-          ? error.message
-          : 'Unable to load GitHub repositories.',
+      repositories: fallbackRepositories,
+      error: null as string | null,
     }
   }
 }

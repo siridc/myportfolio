@@ -3,11 +3,16 @@ import { HelpCircle, X } from 'lucide-react'
 type TerminalHeaderProps = {
   onClose: () => void
   onToggleHelp: () => void
+  isDraggable?: boolean
 }
 
-export function TerminalHeader({ onClose, onToggleHelp }: TerminalHeaderProps) {
+export function TerminalHeader({ onClose, onToggleHelp, isDraggable = false }: TerminalHeaderProps) {
   return (
-    <div className="flex cursor-grab items-center justify-between border-b border-[var(--border)] bg-[var(--surface)] px-4 py-3 active:cursor-grabbing">
+    <div
+      className={`flex items-center justify-between border-b border-[var(--border)] bg-[var(--surface)] px-4 py-3 ${
+        isDraggable ? 'cursor-grab active:cursor-grabbing' : ''
+      }`}
+    >
       <div className="flex items-center gap-3">
         <div className="flex gap-1.5">
           <div className="h-3 w-3 rounded-full bg-[var(--accent-error)] opacity-80" />

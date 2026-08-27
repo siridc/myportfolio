@@ -288,11 +288,24 @@ export function ProjectsSection() {
                 studentrecord: ['PHP', 'MySQL'],
               }
 
+              const repoLiveUrlMap: Record<string, string> = {
+                'gourmet-discoveries': 'https://gourmet-discoveries.vercel.app/',
+                gourmetdiscoveries: 'https://gourmet-discoveries.vercel.app/',
+                'simple-calculator': 'https://siridc.github.io/Simple-Calculator/',
+                simplecalculator: 'https://siridc.github.io/Simple-Calculator/',
+              }
+
               const normalizedKey = repository.name.toLowerCase().replace(/[^a-z0-9]/g, '')
               const techStack =
                 repoTechMap[normalizedKey] ||
                 repoTechMap[repository.name.toLowerCase()] ||
                 (repository.language ? [repository.language] : [])
+
+              const liveUrl =
+                repoLiveUrlMap[normalizedKey] ||
+                repoLiveUrlMap[repository.name.toLowerCase()] ||
+                repository.homepage ||
+                null
 
               const description =
                 repository.description ??
@@ -318,15 +331,29 @@ export function ProjectsSection() {
                       </div>
                     )}
                   </div>
-                  <a
-                    href={repository.html_url}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-[var(--accent-blue)] transition hover:underline"
-                  >
-                    Open repository
-                    <ExternalLink className="h-4 w-4" />
-                  </a>
+                  <div className="mt-4 flex flex-wrap items-center gap-2.5 pt-2">
+                    {liveUrl && (
+                      <a
+                        href={liveUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-1.5 rounded-md bg-[var(--accent-green)] px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-[var(--accent-green-hover)]"
+                        style={{ color: 'white' }}
+                      >
+                        <ExternalLink className="h-3.5 w-3.5" />
+                        View Project
+                      </a>
+                    )}
+                    <a
+                      href={repository.html_url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1.5 rounded-md border border-[var(--border)] bg-[var(--surface)] px-3 py-1.5 text-xs font-medium text-[var(--text-strong)] transition hover:border-[var(--accent-blue)] hover:text-[var(--accent-blue)]"
+                    >
+                      <GitHubMark className="h-3.5 w-3.5" />
+                      Open repository
+                    </a>
+                  </div>
                 </article>
               )
             })}

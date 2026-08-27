@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState, useRef } from 'react'
 import type { TerminalLine, TerminalState } from '../../types/terminal'
 import { parseCommand } from '../../lib/terminal/commandParser'
 import { findCommand, getSuggestions } from '../../lib/terminal/commandMatcher'
+import { useMediaQuery } from '../../hooks/useMediaQuery'
 import { TerminalHeader } from './TerminalHeader'
 import { TerminalInput } from './TerminalInput'
 import { TerminalOutput } from './TerminalOutput'
@@ -19,6 +20,7 @@ const TERMINAL_PROMPT = 'dess ~/portfolio $'
 
 export function Terminal({ isOpen, onClose, onNavigate, onToggleTheme }: TerminalProps) {
   const shouldReduceMotion = useReducedMotion()
+  const isDesktop = useMediaQuery('(min-width: 640px)')
   const constraintsRef = useRef<HTMLDivElement>(null)
 
   const [state, setState] = useState<TerminalState>({
@@ -31,21 +33,6 @@ export function Terminal({ isOpen, onClose, onNavigate, onToggleTheme }: Termina
     suggestions: [],
     isFirstTime: true,
   })
-
-  // Synchronize internal open state with prop, handle first time session flag
-  useEffect(() => {
-    if (isOpen) {
-      setState(s => {
-        // Clean up temporary navigation and opening messages so they don't persist on reopen
-        const cleanedOutput = s.output.filter(line => 
-          !(typeof line.content === 'string' && (line.content.startsWith('Navigating to ') || line.content.startsWith('Opening ')))
-        )
-        return { ...s, isOpen: true, isHelpOpen: false, output: cleanedOutput }
-      })
-    } else {
-      setState(s => ({ ...s, isOpen: false, isFirstTime: false }))
-    }
-  }, [isOpen])
 
   // Prevent background scrolling when terminal is open
   useEffect(() => {
@@ -60,6 +47,12 @@ export function Terminal({ isOpen, onClose, onNavigate, onToggleTheme }: Termina
   }, [isOpen])
 
   const handleClose = useCallback(() => {
+    setState(s => {
+      const cleanedOutput = s.output.filter(line => 
+        !(typeof line.content === 'string' && (line.content.startsWith('Navigating to ') || line.content.startsWith('Opening ')))
+      )
+      return { ...s, isFirstTime: false, isHelpOpen: false, output: cleanedOutput }
+    })
     onClose()
   }, [onClose])
 
@@ -158,7 +151,7 @@ export function Terminal({ isOpen, onClose, onNavigate, onToggleTheme }: Termina
           handleClose()
         }, 300)
       }
-    } catch (error) {
+    } catch {
       appendOutput([{ id: crypto.randomUUID(), type: 'error', content: 'An unexpected error occurred while executing the command.' }])
     }
   }
@@ -207,8 +200,8 @@ export function Terminal({ isOpen, onClose, onNavigate, onToggleTheme }: Termina
           />
           
           <motion.div
-            drag
-            dragConstraints={constraintsRef}
+            drag={isDesktop}
+            dragConstraints={isDesktop ? constraintsRef : undefined}
             dragMomentum={false}
             dragElastic={0.1}
             initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.95, y: 20 }}
@@ -217,7 +210,7 @@ export function Terminal({ isOpen, onClose, onNavigate, onToggleTheme }: Termina
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
             className="pointer-events-auto absolute bottom-0 left-0 right-0 flex h-[75vh] w-full flex-col overflow-hidden border-t border-[var(--border)] bg-[var(--surface-muted)] shadow-2xl sm:bottom-10 sm:left-[10%] sm:right-auto sm:h-[500px] sm:w-[600px] sm:rounded-xl sm:border"
           >
-            <TerminalHeader onClose={handleClose} onToggleHelp={handleToggleHelp} />
+            <TerminalHeader onClose={handleClose} onToggleHelp={handleToggleHelp} isDraggable={isDesktop} />
             
             <AnimatePresence>
               {state.isHelpOpen && (
