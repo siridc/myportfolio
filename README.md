@@ -1,75 +1,68 @@
-# React + TypeScript + Vite
+# Dessiree Camille Pasion — Developer Portfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+[![React](https://img.shields.io/badge/React-19.2-61DAFB?logo=react&logoColor=black)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Vite](https://img.shields.io/badge/Vite-6.x-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.x-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![Framer Motion](https://img.shields.io/badge/Framer_Motion-12.x-0055FF?logo=framer&logoColor=white)](https://www.framer.com/motion/)
+[![GitHub API](https://img.shields.io/badge/GitHub-REST_API-181717?logo=github&logoColor=white)](https://docs.github.com/en/rest)
+[![Formspree](https://img.shields.io/badge/Formspree-Contact_API-E51224?logo=formspree&logoColor=white)](https://formspree.io/)
 
-Currently, two official plugins are available:
+A modern, high-performance developer portfolio showcasing front-end web development, quality assurance, and project management work. Built with a focus on clean UI/UX, interactive developer tools, and live API integrations.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## Key Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Interactive Developer Terminal (`>_`)**:
+  - Embedded modal CLI simulator supporting custom commands (`help`, `about`, `skills`, `projects`, `experience`, `education`, `contact`, `resume`, `github`, `linkedin`, `goto <section>`, `clear`, `history`).
+  - Interactive easter eggs (`sudo hire-dess`, `coffee`).
+  - Keyboard shortcuts, tab autocomplete, and arrow key command history (`↑` / `↓`).
 
-## Expanding the ESLint configuration
+- **Command Palette (`Ctrl + K` / `Cmd + K`)**:
+  - Quick launcher for rapid section navigation, resume access, and theme switching.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **Live GitHub Repository Explorer**:
+  - Dynamically fetches public repositories using the GitHub REST API with language badges, stars, forks, and live links.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- **Interactive Project Showcase**:
+  - In-depth presentation of capstone work like **TrueHue** (color vision deficiency assistance app built with Flutter and Dart) with interactive modal image previews.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- **Contact Form Integration (Formspree API)**:
+  - Direct message delivery with live submission state management and input validation.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- **Dark / Light Theme System**:
+  - Custom CSS variables design system with instant switching and persistent state.
 
-```
+---
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Technologies Used
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Frontend & Core
+| Technology | Description |
+| :--- | :--- |
+| **React 19** | Component-based UI architecture and state management |
+| **TypeScript** | Type-safe development and strict schema validation |
+| **Vite** | Next-generation frontend build tooling and HMR |
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Styling & Animation
+| Technology | Description |
+| :--- | :--- |
+| **Tailwind CSS v4** | Modern utility-first CSS framework and design tokens |
+| **Framer Motion** | Fluid animations, modal transitions, and interactive gesture feedback |
+| **Lucide React** | Modern, accessible iconography |
 
-```
+### APIs & Integrations
+| API / Service | Purpose |
+| :--- | :--- |
+| **[GitHub REST API](https://docs.github.com/en/rest)** | Fetches public repository stats (`/users/siridc/repos`) in real-time |
+| **[Formspree API](https://formspree.io/)** | Serverless contact form handling and email delivery |
+
+---
+
+## Connect With Me
+
+**Dessiree Camille Pasion**
+- **GitHub**: [@siridc](https://github.com/siridc)
+- **LinkedIn**: [dessiree-camille-pasion](https://www.linkedin.com/in/dessiree-camille-pasion/)
+- **Email**: [dcampasion@gmail.com](mailto:dcampasion@gmail.com)
